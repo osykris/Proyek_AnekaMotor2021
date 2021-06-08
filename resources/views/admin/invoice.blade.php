@@ -17,7 +17,7 @@
                 <h6 style="color: gray;">No. Queue&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;: {{ $booking->queue }} <br> Service Date &nbsp;&nbsp;&nbsp;&nbsp;: {{ $booking->service_date }} <br> Name of STNK &nbsp;: {{ $booking->name_stnk }}</h6>
                 <div class="card">
                     <div class="card-body">
-                        <h4 style="color: #8B0000;" <i class="fas fa-receipt" style="color: #8B0000;"></i> Invoice</h4>
+                        <h4 style="color: #8B0000;" <i class="fas fa-receipt" style="color: #8B0000; font-weight:bold"></i> Invoice</h4>
                         <table class="table">
                             <tbody>
                                 @foreach($bookings as $booking)
@@ -64,6 +64,7 @@
                                 <th>Sparepart Name</th>
                                 <th>Total Sparepart</th>
                                 <th>Price</th>
+                                <th>Installation Costs</th>
                                 <th>Total Price</th>
                                 <th>Action</th>
                             </tr>
@@ -74,15 +75,16 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td>{{ $service_detail->sparepart->nameS }}</td>
-                                <td>{{ $service_detail->total_sparepart }} sparepart </td>
-                                <td>Rp. {{ number_format($service_detail->sparepart->price) }}</td>
-                                <td>Rp. {{ number_format($service_detail->total_price) }}</td>
-                                <td>
-                                    <form action=" {{ url('sparepartDelete') }}/{{ $service_detail->id }}" method="post">
-                            @csrf
-                            {{ method_field('DELETE') }}
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete data?');"><i class="fa fa-trash"></i></button>
-                            </form>
+                                <td>{{ $service_detail->total_sparepart }} sparepart</td>
+                                <td>Rp. {{ number_format($service_detail->sparepart->price) }} </td>
+                                <td>Rp. {{ number_format($service_detail->biayaPemasangan) }}</td>
+                                <td align=" right">Rp. {{ number_format($service_detail->total_price) }}</td>
+                            <td>
+                                <form action=" {{ url('sparepartDelete') }}/{{ $service_detail->id }}" method="post">
+                                    @csrf
+                                    {{ method_field('DELETE') }}
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete data?');"><i class="fa fa-trash"></i></button>
+                                </form>
                             </td>
                             </tr>
                             @endforeach
@@ -92,45 +94,66 @@
                             </tr>
                             </tbody>
                         </table>
-                        @endif
+                     
+                    </div>
+                </div><br>
+                <div class="form-group row mb-0 mt-0">
+                    <div class="col-md-12 offset-md-0">
+                        <a href="/addTypeService" class="btn" style=" width: 200px;font-weight: bold; font-size: 16px; background:  black; color: white;">
+                            Add Type of Service
+                        </a>
                     </div>
                 </div><br>
                 <div class="card">
                     <div class="card-body">
+
+                        <table class="table table-striped"">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Name of Service</th>
+                                <th align=" right">Price</th>
+                            <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <?php $no = 1; ?>
+                                @foreach($detailJenis as $detailJeniss)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $detailJeniss->jenisService->name }}</td>
+                                    <td align="right">Rp. {{ number_format($detailJeniss->jenisService->price) }}</td>
+                                    <td>
+                                        <form action="{{ url('serviceDelete') }}/{{ $detailJeniss->id }}" method="post">
+                                            @csrf
+                                            {{ method_field('DELETE') }}
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete data?');"><i class="fa fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                <tr>
+                                    <td colspan="2" align="right"><strong>Total Service Fee :</strong></td>
+                                    <td align="right"><strong>Rp. {{ number_format($booking->priceService) }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="right"><strong>Total :</strong></td>
+                                    <td align="right"><strong>Rp. {{ number_format($booking->total_price) }}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <form method="POST" action="{{ url('InvoiceCompleted') }}/{{ $booking->id }}" enctype="multipart/form-data">
                             @csrf
-                            <div class="form-group row">
-                                <label for="squareInput" class="col-md-5 col-form-label" style="color: #8B0000;">Type of services</label>
-                                <div class="col-md-7">
-                                    <select class="custom-select" name="id_jenisService">
-                                        <option selected>Select Type of Service</option>
-                                        @foreach($jenisServices as $jenisService)
-                                        <option value="{{ $jenisService->id }}">{{ $jenisService->name }} - Rp. {{number_format($jenisService->price)}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="queue" class="col-md-5 col-form-label" style="color: #8B0000;">Service Actions</label>
-
-                                <div class="col-md-7">
-                                    <textarea placeholder="Enter service actions..." required="" style="color: gray;" id="tindakan" class="form-control @error('tindakan') is-invalid @enderror" name="tindakan"></textarea>
-
-                                    @error('tindakan')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
+                            {{ method_field('POST') }}
                             <div class="form-group row mb-0 mt-0">
-                                <div class="col-md-12 offset-md-0" align="right">
-                                    <button type="submit" class="btn" style=" width: 540px;font-weight: bold; font-size: 16px; background:  #8B0000; color: white;">
+                                <div class="col-md-12 offset-md-0">
+                                    <button type="submit" class="btn" style=" width: 940px;font-weight: bold; font-size: 16px; background:  #8B0000; color: white;">
                                         Send
                                     </button>
                                 </div>
                             </div>
                         </form>
+                        @endif
                     </div>
                 </div>
             </div>

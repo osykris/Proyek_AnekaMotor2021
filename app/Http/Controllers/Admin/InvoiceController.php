@@ -9,9 +9,12 @@ use App\Models\Service;
 use App\Models\Sparepart;
 use App\Models\Category;
 use Alert;
+use App\Models\DetailJenisService;
 use App\Models\DetailService;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JenisService;
+
+use function GuzzleHttp\Promise\all;
 
 class InvoiceController extends Controller
 {
@@ -26,18 +29,32 @@ class InvoiceController extends Controller
             $service_details = DetailService::where('service_id', $booking->id)->get();
 
         }
-     	return view('admin.invoice', compact('booking', 'bookings', 'jenisServices', 'service_details'));
+        $detailJenis = [];
+        if(!empty($booking))
+        {
+            $detailJenis  = DetailJenisService::where('service_id', $booking->id)->get();
+
+        }
+     	return view('admin.invoice', compact('booking', 'bookings', 'jenisServices', 'service_details', 'detailJenis'));
     }
 
     public function render()
     {
         $spareparts =  DB::table('spareparts')
         ->join('categories', 'spareparts.category_id', '=', 'categories.id')
-        ->select('categories.name', 'spareparts.nameS', 'spareparts.price', 'spareparts.stock', 'spareparts.id')
+        ->select('categories.name', 'spareparts.nameS', 'spareparts.price', 'spareparts.stock', 'spareparts.id', 'spareparts.biayaPemasangan')
         ->get();
         $category = Category::all();
 		
         return view('admin.addSparepart',compact('spareparts', 'category'));
+       
+    }
+
+    public function renderService()
+    {
+        $jenisServices =  JenisService::all();
+        $category = Category::all();
+        return view('admin.addTypeService',compact('jenisServices', 'category'));
        
     }
 
@@ -74,7 +91,8 @@ class InvoiceController extends Controller
             $service_detail->sparepartName = $sparepart->nameS;
             $service_detail->total_sparepart = $request->total_sparepart;
             $service_detail->price = $sparepart->price;
-            $service_detail->total_price = $sparepart->price*$request->total_sparepart;
+            $service_detail->biayaPemasangan = $sparepart->biayaPemasangan;
+            $service_detail->total_price = $sparepart->price*$request->total_sparepart+$sparepart->biayaPemasangan;
 	    	$service_detail->save();
 			
     	}else 
@@ -91,9 +109,40 @@ class InvoiceController extends Controller
 
     	//jumlah total
 		$service = Service::where('status','Service complete')->first();
-    	$service->total_price = $service->total_price+$sparepart->price*$request->total_sparepart;
+    	$service->total_price = $service->total_price+$sparepart->price*$request->total_sparepart+$sparepart->biayaPemasangan;
         $service->update();
 		alert()->success('Adding sparepart successfully entered the invoice', 'Success');
+    	return redirect('bookingdata/invoice/' . $new_service->id);
+
+	}
+
+    public function addService($id)
+    {	
+        $jenisServices = JenisService::where('id', $id)->first();
+    	
+
+    	//simpan ke databaseServicedetail
+    	$new_service = Service::where('status', 'Service complete')->first();
+
+    	//cek Servicedetail
+        $check_jenisService_detail = DetailJenisService::where('jenisService_id', $jenisServices->id)->where('service_id', $new_service->id)->first();
+    	if(empty($check_jenisService_detail))
+    	{
+    		$service_detail = new DetailJenisService();
+	    	$service_detail->service_id = $new_service->id;
+            $service_detail->jenisService_id = $jenisServices->id;
+            $service_detail->serviceName = $jenisServices->name;
+            $service_detail->price = $jenisServices->price;
+	    	$service_detail->save();
+			
+        }
+
+    	//jumlah total
+		$service = Service::where('status','Service complete')->first();
+        $service->priceService = $service->priceService + $jenisServices->price;
+    	$service->total_price = $service->total_price+$jenisServices->price;
+        $service->update();
+		alert()->success('Adding type of service successfully entered the invoice', 'Success');
     	return redirect('bookingdata/invoice/' . $new_service->id);
 
 	}
@@ -103,7 +152,7 @@ class InvoiceController extends Controller
         $service_detail = DetailService::where('id', $id)->first();
 
         $service =Service::where('id',  $service_detail->service_id)->first();
-        $service->total_price =  $service->total_price- $service_detail->total_price;
+        $service->total_price =  $service->total_price- $service_detail->total_price-$service_detail->biayaPemasangan;
         $service->update();
 
 
@@ -113,20 +162,28 @@ class InvoiceController extends Controller
         return redirect('bookingdata/invoice/' . $service->id);
     }
 
-	public function konfirmasi(Request $request, $id)
+    public function deleteJenis($id)
     {
-		$jenisServices = JenisService::where('id', $request->id_jenisService)->first();
+        $detailJenis = DetailJenisService::where('id', $id)->first();
 
-        $service = Service::where('id', $id)->where('status','Service complete')->first();
-		$service_id =  $service->id;
-		$service->jenisService_id  = $request->id_jenisService;
-        $service->status = 'Waiting for payment';
-		$service->tindakan = $request->tindakan;
-        $service->total_price = $service->total_price + $jenisServices->price;
-		$service->jenis_service = $jenisServices->name;
-        $service->priceService = $jenisServices->price;
+        $service =Service::where('id',  $detailJenis->service_id)->first();
+        $service->priceService =  $service->priceService - $detailJenis->price;
+        $service->total_price =  $service->total_price - $detailJenis->price;
         $service->update();
 
+
+        $detailJenis->delete();
+
+        alert()->error('Your type of service has been successfully deleted', 'Deleted');
+        return redirect('bookingdata/invoice/' . $service->id);
+    }
+
+	public function konfirmasi($id)
+    {
+        $service = Service::where('id', $id)->where('status','Service complete')->first();
+		$service_id =  $service->id;
+        $service->status = 'Waiting for payment';
+        $service->update();
         $service_details = DetailService::where('service_id',  $service_id)->get();
         foreach ($service_details as $service_detail) {
             $sparepart = Sparepart::where('id', $service_detail->sparepart_id)->first();
@@ -136,7 +193,6 @@ class InvoiceController extends Controller
 
         alert()->success('Invoice Successful completed. Please, tell the customer to pay!', 'Success');
         return redirect('bookingdata');
-
     }
 
     public function invoice($id)
@@ -150,7 +206,13 @@ class InvoiceController extends Controller
             $service_details = DetailService::where('service_id', $booking->id)->get();
 
         }
-     	return view('admin.invoiceDone', compact('bookings', 'booking', 'jenisServices', 'service_details'));
+        $detailJenis = [];
+        if(!empty($booking))
+        {
+            $detailJenis  = DetailJenisService::where('service_id', $booking->id)->get();
+
+        }
+     	return view('admin.invoiceDone', compact('bookings', 'booking', 'jenisServices', 'service_details', 'detailJenis'));
     }
 
 }

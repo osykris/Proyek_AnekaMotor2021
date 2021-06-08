@@ -12,15 +12,14 @@
         <div class="card-body" style="color: black;">
             <div class="col-md-12">
                 <center>
-                    <p style="color: #008080;"><b style="font-size: 24px;">Bengkel Aneka Motor Wlingi </b><br> Beru, Wlingi, Blitar, East Java 66184, Indonesia <br> No. HP : +62 857-8160-6016
+                    <p style="color: #008080;"><b style="font-size: 20px;">Bengkel Aneka Motor Wlingi </b><br> Beru, Wlingi, Blitar, East Java 66184, Indonesia <br> No. HP : +62 857-8160-6016
                     </p>
                 </center>
                 <hr>
-                <h6 style="color: gray; font-size: 15px; ">No. Queue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $booking->queue }} <br> Service Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{ $booking->service_date }} <br> Name of STNK &nbsp;: {{ $booking->name_stnk }}</h6>
-                <br>
+                <h6 style="color: gray;">No. Queue&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;: {{ $booking->queue }} <br> Service Date &nbsp;&nbsp;&nbsp;&nbsp;: {{ $booking->service_date }} <br> Name of STNK &nbsp;: {{ $booking->name_stnk }}</h6>
                 <div class="card">
                     <div class="card-body">
-                        <h4 style="color: #8B0000;"><i class="fas fa-receipt" style="color: #8B0000;"></i> Invoice</h4>
+                        <h4 style="color: #8B0000;" <i class="fas fa-receipt" style="color: #8B0000;"></i> Invoice</h4>
                         <table class="table">
                             <tbody style="color: gray;">
                                 @foreach($bookings as $booking)
@@ -44,27 +43,39 @@
                                     <td>:</td>
                                     <td>{{ $booking->complaint }}</td>
                                 </tr>
-                                <tr>
-                                    <td>Service Action</td>
-                                    <td>:</td>
-                                    <td>{{ $booking->tindakan }}</td>
+                            </tbody>
+                        </table>
+                        <div style="color: #8B0000; font-weight:bold; font-size: 16px">
+                        Service Type Details
+                        </div><br>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr style="color: gray;">
+                                <th>ServiceName</th>
+                                <th>Price</th>
                                 </tr>
-                                <tr>
-                                    <td>Type of Service</td>
-                                    <td>:</td>
-                                    <td>{{ $booking->jenis_service }}</td>
+                            </thead>
+                            <tbody>
+                                @foreach($detailJenis as $detailJeniss)
+                                <tr style="color: gray;">
+                                    <td> {{ $detailJeniss->serviceName }} </td>
+                                    <td> Rp. {{ number_format($detailJeniss->price)}} </td>
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                         @endforeach
-                        <table class="table table-striped"">
-                        <thead>
-                            <tr style=" color: gray;">
-                            <th>No.</th>
-                            <th>Sparepart Name</th>
-                            <th>Total Sparepart</th>
-                            <th>Price</th>
-                            <th style=" text-align: right;">Total Price</th>
+                        <div style="color: #8B0000; font-weight:bold; font-size: 16px">
+                        Sparepart Details
+                        </div><br>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr style="color: gray;">
+                                    <th>No.</th>
+                                    <th>Sparepart Name</th>
+                                    <th>Total Sparepart</th>
+                                    <th>Price</th>
+                                    <th style=" text-align: right;">Total Price</th>
                             </thead>
                             <tbody>
                                 <?php $no = 1; ?>

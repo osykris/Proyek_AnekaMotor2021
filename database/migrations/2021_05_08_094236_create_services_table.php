@@ -17,8 +17,6 @@ class CreateServicesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('jenisService_id')->unsigned()->nullable();
-            $table->foreign('jenisService_id')->references('id')->on('jenis_services')->onDelete('cascade')->onUpdate('cascade');
             $table->string('queue')->nullable()->unique();
             $table->string('name_stnk');
             $table->string('number_plat');
@@ -27,8 +25,7 @@ class CreateServicesTable extends Migration
             $table->date('service_date');
             $table->text('complaint');
             $table->string('status')->default('pending');
-            $table->string('jenis_service')->nullable();
-            $table->string('tindakan')->nullable();
+            $table->integer('priceService')->nullable();
             $table->integer('total_price')->nullable();
             $table->timestamps();
         });

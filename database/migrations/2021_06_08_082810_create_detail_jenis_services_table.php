@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetailServicesTable extends Migration
+class CreateDetailJenisServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class CreateDetailServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('detail_services', function (Blueprint $table) {
+        Schema::create('detail_jenis_services', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('service_id')->unsigned();
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('sparepart_id')->unsigned()->nullable();
-            $table->foreign('sparepart_id')->references('id')->on('spareparts')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('sparepartName');
-            $table->integer('total_sparepart');
+            $table->integer('jenisService_id')->unsigned()->nullable();
+            $table->foreign('jenisService_id')->references('id')->on('jenis_services')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('serviceName');
             $table->integer('price');
-            $table->integer('biayaPemasangan');
-            $table->integer('total_price');
             $table->timestamps();
         });
     }
@@ -35,6 +32,6 @@ class CreateDetailServicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_service');
+        Schema::dropIfExists('detail_jenis_services');
     }
 }

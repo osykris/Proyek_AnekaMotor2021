@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use Auth;
 use Alert;
+use App\Models\DetailJenisService;
 use App\Models\DetailService;
 use App\Models\JenisService;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -57,7 +58,13 @@ class HistoryController extends Controller
         if (!empty($booking)) {
             $service_details = DetailService::where('service_id', $booking->id)->get();
         }
-        return view('invoice', compact('bookings', 'booking', 'jenisServices', 'service_details', 'categories'));
+        $detailJenis = [];
+        if(!empty($booking))
+        {
+            $detailJenis  = DetailJenisService::where('service_id', $booking->id)->get();
+
+        }
+        return view('invoice', compact('bookings', 'booking', 'jenisServices', 'service_details', 'categories', 'detailJenis'));
     }
 
     public function index_service()
@@ -76,7 +83,13 @@ class HistoryController extends Controller
         if (!empty($booking)) {
             $service_details = DetailService::where('service_id', $booking->id)->get();
         }
-        return view('detailService', compact('bookings', 'booking', 'categories', 'service_details'));
+        $detailJenis = [];
+        if(!empty($booking))
+        {
+            $detailJenis  = DetailJenisService::where('service_id', $booking->id)->get();
+
+        }
+        return view('detailService', compact('bookings', 'booking', 'categories', 'service_details', 'detailJenis'));
     }
 
     public function cetak_pdf($id)
@@ -89,7 +102,13 @@ class HistoryController extends Controller
         if (!empty($booking)) {
             $service_details = DetailService::where('service_id', $booking->id)->get();
         }
-        $pdf = PDF::loadview('invoice_pdf', ['booking' => $booking, 'bookings' => $bookings, 'jenisServices' => $jenisServices, 'categories'=>$categories, 'service_details'=>$service_details])->setPaper('a4', 'portrait');
+        $detailJenis = [];
+        if(!empty($booking))
+        {
+            $detailJenis  = DetailJenisService::where('service_id', $booking->id)->get();
+
+        }
+        $pdf = PDF::loadview('invoice_pdf', ['booking' => $booking, 'bookings' => $bookings, 'jenisServices' => $jenisServices, 'categories'=>$categories, 'service_details'=>$service_details, 'detailJenis'=>$detailJenis])->setPaper('a4', 'portrait');
         return $pdf->stream();
     }
 }

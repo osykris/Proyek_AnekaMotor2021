@@ -30,6 +30,7 @@
                             <th>Category ID</th>
                             <th>Name</th>
                             <th>Price</th>
+                            <th>Installation Costs</th>
                             <th>Stock</th>
                             <th>Action</th>
                         </tr>
@@ -77,6 +78,10 @@
                 <div class="form-group">
                     <label for="price">Price:</label>
                     <input type="text" class="form-control" name="price" id="price">
+                </div>
+                <div class="form-group">
+                    <label for="biayaPemasangan">Installation Costs:</label>
+                    <input type="text" class="form-control" name="biayaPemasangan" id="biayaPemasangan">
                 </div>
                 <div class="form-group">
                     <label for="stock">Stock:</label>
@@ -185,6 +190,11 @@
                     sClass: 'text-center'
                 },
                 {
+                    data: 'biayaPemasangan',
+                    name: 'biayaPemasangan',
+                    sClass: 'text-center'
+                },
+                {
                     data: 'stock',
                     name: 'stock',
                     sClass: 'text-center'
@@ -213,6 +223,7 @@
                     category_id: $('#category_id').val(),
                     nameS: $('#nameS').val(),
                     price: $('#price').val(),
+                    biayaPemasangan: $('#biayaPemasangan').val(),
                     stock: $('#stock').val(),
                 },
                 success: function(result) {
@@ -274,6 +285,7 @@
                 data: {
                     nameS: $('#editTitle').val(),
                     price: $('#editPrice').val(),
+                    biayaPemasangan: $('#editPemasangan').val(),
                     stock: $('#editStock').val(),
                 },
                 success: function(result) {

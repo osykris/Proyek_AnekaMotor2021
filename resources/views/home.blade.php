@@ -102,7 +102,7 @@
 						<thead>
 							<tr>
 								<th>No</th>
-								<th>Type of Service</th>
+								<th>Name of Service</th>
 								<th>Price</th>
 							</tr>
 						</thead>

@@ -22,6 +22,11 @@ class Service extends Model
         return $this->hasMany(DetailService::class, 'service_id', 'id');
     }
 
+    public function detail_jenisServices()
+    {
+        return $this->hasMany(DetailJenisService::class, 'service_id', 'id');
+    }
+
     public function payments()
     {
         return $this->hasMany(Payment::class, 'service_id', 'id');

@@ -42,6 +42,7 @@ class SparepartController extends Controller
             'category_id' => 'required',
             'nameS' => 'required',
             'price' => 'required',
+            'biayaPemasangan' => 'required',
             'stock' => 'required',
         ]);
 
@@ -69,6 +70,10 @@ class SparepartController extends Controller
                     <input type="text" class="form-control" name="name" id="editPrice" value="' . $data->price . '">
                 </div>
                 <div class="form-group">
+                <label for="biayaPemasangan">Installation Cost:</label>
+                <input type="text" class="form-control" name="biayaPemasangan" id="editPemasangan" value="' . $data->biayaPemasangan . '">
+                </div>
+                <div class="form-group">
                     <label for="Stock">Stock:</label>
                     <input type="text" class="form-control" name="name" id="editStock" value="' . $data->stock . '">
                 </div>';
@@ -81,6 +86,7 @@ class SparepartController extends Controller
         $validator = Validator::make($request->all(), [
             'nameS' => 'required',
             'price' => 'required',
+            'biayaPemasangan' => 'required',
             'stock' => 'required',
         ]);
 

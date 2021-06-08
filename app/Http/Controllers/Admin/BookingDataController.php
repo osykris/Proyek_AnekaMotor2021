@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use Alert;
 use App\Models\Category;
+use App\Models\DetailJenisService;
 use App\Models\Payment;
 use App\Models\DetailService;
 use App\Models\JenisService;
@@ -56,7 +57,13 @@ class BookingDataController extends Controller
         if (!empty($booking)) {
             $service_details = DetailService::where('service_id', $booking->id)->get();
         }
-        $pdf = PDF::loadview('invoice_pdf', ['booking' => $booking, 'bookings' => $bookings, 'jenisServices' => $jenisServices, 'categories'=>$categories, 'service_details'=>$service_details])->setPaper('a4', 'portrait');
+        $detailJenis = [];
+        if(!empty($booking))
+        {
+            $detailJenis  = DetailJenisService::where('service_id', $booking->id)->get();
+
+        }
+        $pdf = PDF::loadview('invoice_pdf', ['booking' => $booking, 'bookings' => $bookings, 'jenisServices' => $jenisServices, 'categories'=>$categories, 'service_details'=>$service_details, 'detailJenis'=>$detailJenis])->setPaper('a4', 'portrait');
         return $pdf->stream();
     }
 

@@ -42,47 +42,59 @@
                                     <td>:</td>
                                     <td>{{ $booking->complaint }}</td>
                                 </tr>
+                            </tbody>
+                        </table>
+                        <div style="color: #8B0000; font-weight:bold; font-size: 16px">
+                        Service Type Details
+                        </div><br>
+                        <table class="table table-striped">
+                            <thead>
                                 <tr>
-                                    <td>Service Action</td>
-                                    <td>:</td>
-                                    <td>{{ $booking->tindakan }}</td>
+                                <th>ServiceName</th>
+                                <th>Price</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($detailJenis as $detailJeniss)
                                 <tr>
-                                    <td>Type of Service</td>
-                                    <td>:</td>
-                                    <td>{{ $booking->jenis_service }}</td>
+                                    <td> {{ $detailJeniss->serviceName }} </td>
+                                    <td> Rp. {{ number_format($detailJeniss->price)}} </td>
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                         @endforeach
-                        <table class="table table-striped"">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Sparepart Name</th>
-                                <th>Total Sparepart</th>
-                                <th>Price</th>
-                                <th style="text-align: right;">Total Price</th>
-                        </thead>
-                        <tbody >
-                            <?php $no = 1; ?>
-                            @foreach($service_details as $service_detail)
-                            <tr>
-                                <td>{{ $no++ }}</td>
-                                <td>{{ $service_detail->sparepart->nameS }}</td>
-                                <td>{{ $service_detail->total_sparepart }} sparepart </td>
-                                <td>Rp. {{ number_format($service_detail->sparepart->price) }}</td>
-                                <td align=" right">Rp. {{ number_format($service_detail->total_price) }}</td>
-                            </tr>
-                            @endforeach
-                            <tr>
-                                <td colspan=" 4" align="right"><strong>Service Price :</strong></td>
-                                <td align="right"><strong>Rp. {{ number_format($booking->priceService) }}</strong></td>
-                            </tr>
-                            <tr>
-                                <td colspan=" 4" align="right"><strong>Total Price :</strong></td>
-                                <td align="right"><strong>Rp. {{ number_format($booking->total_price) }}</strong></td>
-                            </tr>
+                        <div style="color: #8B0000; font-weight:bold; font-size: 16px">
+                        Sparepart Details
+                        </div><br>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Sparepart Name</th>
+                                    <th>Total Sparepart</th>
+                                    <th>Price</th>
+                                    <th style=" text-align: right;">Total Price</th>
+                            </thead>
+                            <tbody>
+                                <?php $no = 1; ?>
+                                @foreach($service_details as $service_detail)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $service_detail->sparepart->nameS }}</td>
+                                    <td>{{ $service_detail->total_sparepart }} sparepart </td>
+                                    <td>Rp. {{ number_format($service_detail->sparepart->price) }}</td>
+                                    <td align=" right">Rp. {{ number_format($service_detail->total_price) }}</td>
+                                </tr>
+                                @endforeach
+                                <tr>
+                                    <td colspan=" 4" align="right"><strong>Service Price :</strong></td>
+                                    <td align="right"><strong>Rp. {{ number_format($booking->priceService) }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan=" 4" align="right"><strong>Total Price :</strong></td>
+                                    <td align="right"><strong>Rp. {{ number_format($booking->total_price) }}</strong></td>
+                                </tr>
                             </tbody>
                         </table><br>
                         @endif

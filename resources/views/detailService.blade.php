@@ -25,7 +25,7 @@
                             <div class="card-body">
                                 <h4 style="color: #8B0000;"><i class="fas fa-history" style="color: #8B0000;"></i> Service Detail</h4>
                                 <table class="table">
-                                    <tbody>
+                                    <tbody style="color: gray;">
                                         @foreach($bookings as $booking)
                                         <tr>
                                             <td>Name of STNK</td>
@@ -52,15 +52,22 @@
                                             <td>:</td>
                                             <td>{{ $booking->complaint }}</td>
                                         </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <h5 style="color: gray;">Service Action: </h5><br>
+                                <table class="table table-striped">
+                                    <thead style="color: gray;">
                                         <tr>
-                                            <td>Service Action</td>
-                                            <td>:</td>
-                                            <td>{{ $booking->tindakan }}</td>
+                                            <th>ServiceName</th>
+                                            <th>Price</th>
                                         </tr>
+                                    </thead>
+                                    <tbody style="color: gray;">
+                                        @foreach($detailJenis as $detailJeniss)
                                         <tr>
-                                            <td>Type of Service</td>
-                                            <td>:</td>
-                                            <td>{{ $booking->jenis_service }}</td>
+                                            <td> {{ $detailJeniss->serviceName }} </td>
+                                            <td> Rp. {{ number_format($detailJeniss->price)}} </td>
                                         </tr>
                                         @endforeach
                                     </tbody>

@@ -55,8 +55,11 @@ Route::group(['middleware' => 'is_admin'], function () {
     Route::get('bookingdata/invoice/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'detail']);
     Route::get('seePayment/{id}', [App\Http\Controllers\Admin\BookingDataController::class, 'seePayment']);
     Route::get('/addSaprepart', [App\Http\Controllers\Admin\InvoiceController::class, 'render']);
+    Route::get('/addTypeService', [App\Http\Controllers\Admin\InvoiceController::class, 'renderService']);
     Route::post('/sparepart/need/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'order']);
+    Route::post('/TypeService/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'addService']);
     Route::delete('sparepartDelete/{id}',  [App\Http\Controllers\Admin\InvoiceController::class, 'delete']);
+    Route::delete('serviceDelete/{id}',  [App\Http\Controllers\Admin\InvoiceController::class, 'deleteJenis']);
     Route::post('InvoiceCompleted/{id}',[App\Http\Controllers\Admin\InvoiceController::class, 'konfirmasi']);
     Route::get('bookingdata/invoiceDone/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'invoice']);
     Route::get('/contact', [App\Http\Controllers\Admin\ContactController::class, 'render'])->name('contact');

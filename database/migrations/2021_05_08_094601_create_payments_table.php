@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymetsTable extends Migration
+class CreatePaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePaymetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('paymets', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('service_id')->unsigned();
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade')->onUpdate('cascade');
@@ -33,6 +33,6 @@ class CreatePaymetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('paymets');
+        Schema::dropIfExists('payments');
     }
 }

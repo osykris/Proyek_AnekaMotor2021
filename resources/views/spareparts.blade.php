@@ -39,6 +39,7 @@
                                     <th>No</th>
                                     <th>Name</th>
                                     <th>Price</th>
+                                    <th>Installation Costs</th>
                                     <th>Stock</th>
                                 </tr>
                             </thead>
@@ -49,6 +50,7 @@
                                     <td style="color: #444;">{{ $no++ }}</td>
                                     <td style="color: #444;">{{ $sparepart->nameS }}</td>
                                     <td style="color: #444;">Rp. {{ number_format($sparepart->price) }}</td>
+                                    <td style="color: #444;">Rp. {{ number_format($sparepart->biayaPemasangan) }}</td>
                                     <td style="color: #444;">{{ $sparepart->stock }} pcs</td>
                                 </tr>
                                 @endforeach

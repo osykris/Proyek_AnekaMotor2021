@@ -15,18 +15,33 @@ class JenisServiceSeeder extends Seeder
     public function run()
     {
         DB::table('jenis_services')->insert([
-            'name' => 'Hard Service',
-            'price' => '120000'
+            'name' => 'Service',
+            'price' => '40000'
         ]);
         
         DB::table('jenis_services')->insert([
-            'name' => 'Medium Service',
-            'price' => '70000'
+            'name' => 'Brake Check',
+            'price' => '15000'
         ]);
         
         DB::table('jenis_services')->insert([
-            'name' => 'Easy Service',
-            'price' => '30000'
+            'name' => 'Electrical Check',
+            'price' => '20000'
+        ]);
+
+        DB::table('jenis_services')->insert([
+            'name' => 'Oil change',
+            'price' => '31000'
+        ]);
+
+        DB::table('jenis_services')->insert([
+            'name' => 'Tire pump',
+            'price' => '2000'
+        ]);
+
+        DB::table('jenis_services')->insert([
+            'name' => 'Tire Repairs',
+            'price' => '8000'
         ]);
     }
 }

@@ -14,6 +14,7 @@
                                     <th>Category Name</th>
                                     <th>Name</th>
                                     <th>Price</th>
+                                    <th>Installation Costs</th>
                                     <th>Stock</th>
                                     <th>Action</th>
                                 </tr>
@@ -32,6 +33,7 @@
                                         <span class="badge badge-danger"> <i class="fas fa-times"></i> Out of Stock</span>
                                         @endif
                                     </td>
+                                    <td style="color: #444;">Rp. {{ number_format($sparepart->biayaPemasangan) }}</td>
                                     <td style="color: #444;">{{ $sparepart->stock }} pcs</td>
                                     <td>
                                         <form method="post" action="{{ url('/sparepart/need') }}/{{ $sparepart->id }}">

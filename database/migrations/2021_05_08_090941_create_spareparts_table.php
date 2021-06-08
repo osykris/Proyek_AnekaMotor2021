@@ -19,7 +19,7 @@ class CreateSparepartsTable extends Migration
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->integer('price');
-            $table->boolean('is_ready')->default(true);
+            $table->integer('biayaPemasangan');
             $table->integer('stock');
             $table->timestamps();
         });

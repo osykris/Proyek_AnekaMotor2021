@@ -36,4 +36,9 @@ class JenisService extends Model
         return static::find($id)->update($input);
     }
 
+    public function detail_jenisServices()
+    {
+        return $this->hasMany(DetailJenisService::class, 'jenisService_id', 'id');
+    }
+
 }
